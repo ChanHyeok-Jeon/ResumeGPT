@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>구직자 전용 대화창</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: #f4f4f4;
+    }
+    .header {
+      background: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .header .title {
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .header .logout {
+      font-size: 14px;
+      color: #3b82f6;
+      cursor: pointer;
+    }
+    .chat-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 70px);
+    }
+    .chat-header {
+      padding: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+    .chat-header h2 {
+      margin: 0;
+    }
+    .messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .message {
+      margin-bottom: 16px;
+      display: flex;
+    }
+    .bot {
+      justify-content: flex-start;
+    }
+    .user {
+      justify-content: flex-end;
+    }
+    .message .bubble {
+      max-width: 60%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .bot .bubble {
+      background: #f1f1f1;
+      border-radius: 16px 16px 16px 4px;
+    }
+    .user .bubble {
+      background: #3b82f6;
+      color: white;
+      border-radius: 16px 16px 4px 16px;
+    }
+    .input-area {
+      display: flex;
+      padding: 16px;
+      border-top: 1px solid #ddd;
+    }
+    .input-area input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .input-area button {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      margin-left: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="title">ResumeGPT</div>
+  <div class="logout" onclick="location.href='/logout'">로그아웃</div>
+</div>
+
+<div class="chat-container">
+  <div class="chat-header">
+    <h2>안녕하세요, 구직자 <strong>{{ name }}</strong>님!<br>무엇을 도와드릴까요?</h2>
+  </div>
+
+  <div class="messages" id="chatBox">
+    <div class="message bot">
+      <div class="bubble">환영합니다! 이력서나 자기소개서에 대해 궁금한 점을 입력해 주세요.</div>
+    </div>
+    <div class="message user">
+      <div class="bubble">이력서를 작성하고 싶어요.</div>
+    </div>
+  </div>
+
+  <div class="input-area">
+    <input type="text" id="inputMsg" placeholder="메시지를 입력하세요...">
+    <button onclick="sendMessage()">전송</button>
+  </div>
+</div>
+
+<script>
+  function sendMessage() {
+    const input = document.getElementById('inputMsg');
+    const text = input.value.trim();
+    if (text === '') return;
+
+    const chatBox = document.getElementById('chatBox');
+
+    const userMsg = document.createElement('div');
+    userMsg.className = 'message user';
+    userMsg.innerHTML = `<div class="bubble">${text}</div>`;
+    chatBox.appendChild(userMsg);
+
+    input.value = '';
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    setTimeout(() => {
+      const botMsg = document.createElement('div');
+      botMsg.className = 'message bot';
+      botMsg.innerHTML = `<div class="bubble">좋습니다! 어떤 직무에 지원하고 싶으신가요?</div>`;
+      chatBox.appendChild(botMsg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }, 800);
+  }
+</script>
+
+</body>
+</html>
