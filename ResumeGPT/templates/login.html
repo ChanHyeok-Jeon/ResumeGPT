@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>ResumeGPT 로그인</title>
+  <style>
+    body {
+      background-color: #f9f9f9;
+      font-family: Arial, sans-serif;
+    }
+
+    .login-container {
+      width: 360px;
+      margin: 100px auto;
+      background: white;
+      padding: 30px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      border-bottom: 2px solid #007BFF;
+      font-weight: bold;
+      color: #007BFF;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin: 10px 0;
+    }
+
+    .checkbox-row input[type="checkbox"] {
+      margin-right: 8px;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #007BFF;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .login-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 20px;
+      font-size: 14px;
+      align-items: center;
+    }
+
+    .links a {
+      color: #444;
+      text-decoration: none;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-container">
+  <h1>ResumeGPT</h1>
+
+  <div class="tabs">
+    <div class="tab active" onclick="selectTab(this)">구직자</div>
+    <div class="tab" onclick="selectTab(this)">고용자</div>
+  </div>
+
+  <form action="/login" method="POST">
+    <!-- 탭 선택 값 전송용 -->
+    <input type="hidden" id="userType" name="user_type" value="jobseeker">
+
+    <input type="text" name="id" placeholder="아이디" required>
+    <input type="password" name="password" placeholder="비밀번호" required>
+    
+    <div class="checkbox-row">
+      <input type="checkbox" id="autoLogin">
+      <label for="autoLogin">자동 로그인</label>
+    </div>
+  
+    <button type="submit" class="login-btn">로그인</button>
+  
+    <div class="links">
+      <a href="/register_jobseeker">구직자 회원가입</a>
+      <a href="/register_employer">고용자 회원가입</a>
+      <a href="/find_id">아이디 찾기</a>
+      <a href="/find_password">비밀번호 찾기</a>
+    </div>
+  </form>  
+</div>
+
+<script>
+  function selectTab(el) {
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+    el.classList.add('active');
+
+    // 탭에 따라 숨겨진 user_type 값 설정
+    const userTypeInput = document.getElementById('userType');
+    userTypeInput.value = el.textContent === '고용자' ? 'employer' : 'jobseeker';
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>아이디 찾기</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f9f9f9;
+    }
+    .container {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    .top-bar {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .top-bar span {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .tabs {
+      display: flex;
+      margin-bottom: 20px;
+    }
+    .tabs button {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background: #f2f2f2;
+      cursor: pointer;
+    }
+    .tabs .active {
+      background: #3b82f6;
+      color: white;
+      border-color: #3b82f6;
+    }
+    input[type="text"], input[type="email"], input[type="tel"] {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+    .result {
+      margin: 20px 0;
+      font-size: 14px;
+      display: none;
+    }
+    .result b {
+      font-size: 18px;
+      display: block;
+      margin-top: 8px;
+    }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      margin-top: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-outline {
+      background: white;
+      border: 1px solid #ccc;
+    }
+    .btn-blue {
+      background: #3b82f6;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="top-bar">
+    <span>아이디 찾기</span>
+  </div>
+
+  <div class="tabs">
+    <button class="active" onclick="switchTab('email')">이메일로 찾기</button>
+    <button onclick="switchTab('phone')">휴대폰 번호로 찾기</button>
+  </div>
+
+  <div id="form-email">
+    <input type="text" id="name-email" placeholder="이름">
+    <input type="email" id="email" placeholder="이메일">
+  </div>
+
+  <div id="form-phone" style="display:none;">
+    <input type="text" id="name-phone" placeholder="이름">
+    <input type="tel" id="phone" placeholder="휴대폰 번호">
+  </div>
+
+  <button class="btn btn-blue" onclick="findID()">아이디 찾기</button>
+
+  <div class="result" id="result">
+    입력하신 정보로 찾은 아이디는 아래와 같습니다.<br>
+    <b id="user-id">user1234</b>
+  </div>
+
+  <!-- ✅ 수정된 버튼들 -->
+  <button class="btn btn-outline" onclick="location.href='find_password'">비밀번호 찾기</button>
+  <button class="btn btn-blue" onclick="location.href='/'">로그인으로 돌아가기</button> <!-- 로그인 페이지로 이동 -->
+</div>
+
+<script>
+  function switchTab(tab) {
+    const emailTab = document.querySelectorAll('.tabs button')[0];
+    const phoneTab = document.querySelectorAll('.tabs button')[1];
+    const emailForm = document.getElementById('form-email');
+    const phoneForm = document.getElementById('form-phone');
+
+    if (tab === 'email') {
+      emailTab.classList.add('active');
+      phoneTab.classList.remove('active');
+      emailForm.style.display = 'block';
+      phoneForm.style.display = 'none';
+    } else {
+      phoneTab.classList.add('active');
+      emailTab.classList.remove('active');
+      phoneForm.style.display = 'block';
+      emailForm.style.display = 'none';
+    }
+
+    document.getElementById('result').style.display = 'none'; // 결과 숨김
+  }
+
+  function findID() {
+    const activeTab = document.querySelector('.tabs .active').textContent;
+    let name, contact, userId = '';
+
+    // 간단한 예시용 더미 데이터
+    const users = [
+      { name: "홍길동", email: "hong@example.com", phone: "01012345678", id: "hong1234" },
+      { name: "김영희", email: "kim@example.com", phone: "01098765432", id: "kim5678" }
+    ];
+
+    if (activeTab.includes("이메일")) {
+      name = document.getElementById('name-email').value;
+      contact = document.getElementById('email').value;
+      userId = users.find(u => u.name === name && u.email === contact)?.id;
+    } else {
+      name = document.getElementById('name-phone').value;
+      contact = document.getElementById('phone').value;
+      userId = users.find(u => u.name === name && u.phone === contact)?.id;
+    }
+
+    const resultBox = document.getElementById('result');
+    if (userId) {
+      document.getElementById('user-id').textContent = userId;
+      resultBox.style.display = 'block';
+    } else {
+      document.getElementById('user-id').textContent = '일치하는 아이디가 없습니다.';
+      resultBox.style.display = 'block';
+    }
+  }
+</script>
+
+</body>
+</html>
