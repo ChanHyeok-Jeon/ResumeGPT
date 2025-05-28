@@ -131,6 +131,7 @@
 
     const chatBox = document.getElementById('chatBox');
 
+    // 사용자 메시지 출력
     const userMsg = document.createElement('div');
     userMsg.className = 'message user';
     userMsg.innerHTML = `<div class="bubble">${text}</div>`;
@@ -139,13 +140,27 @@
     input.value = '';
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    setTimeout(() => {
+    // GPT에게 메시지 전송
+    fetch('/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text })
+    })
+    .then(res => res.json())
+    .then(data => {
       const botMsg = document.createElement('div');
       botMsg.className = 'message bot';
-      botMsg.innerHTML = `<div class="bubble">좋습니다! 어떤 직무에 지원하고 싶으신가요?</div>`;
+      botMsg.innerHTML = `<div class="bubble">${data.response}</div>`;
       chatBox.appendChild(botMsg);
       chatBox.scrollTop = chatBox.scrollHeight;
-    }, 800);
+    })
+    .catch(err => {
+      const botMsg = document.createElement('div');
+      botMsg.className = 'message bot';
+      botMsg.innerHTML = `<div class="bubble">GPT 응답 중 오류가 발생했습니다.</div>`;
+      chatBox.appendChild(botMsg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    });
   }
 </script>
 

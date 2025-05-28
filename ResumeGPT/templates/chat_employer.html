@@ -127,7 +127,7 @@
   function sendMessage() {
     const input = document.getElementById('inputMsg');
     const text = input.value.trim();
-    if (text === '') return;
+    if (!text) return;
 
     const chatBox = document.getElementById('chatBox');
 
@@ -136,18 +136,30 @@
     userMsg.className = 'message user';
     userMsg.innerHTML = `<div class="bubble">${text}</div>`;
     chatBox.appendChild(userMsg);
-
-    input.value = '';
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    // 챗봇 응답 예시
-    setTimeout(() => {
+    // GPT에게 메시지 보내기
+    fetch('/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text })
+    })
+    .then(res => res.json())
+    .then(data => {
       const botMsg = document.createElement('div');
       botMsg.className = 'message bot';
-      botMsg.innerHTML = `<div class="bubble">좋습니다. 인재 검색을 위해 원하시는 조건을 입력해 주세요.</div>`;
+      botMsg.innerHTML = `<div class="bubble">${data.response}</div>`;
       chatBox.appendChild(botMsg);
       chatBox.scrollTop = chatBox.scrollHeight;
-    }, 800);
+    })
+    .catch(() => {
+      const botMsg = document.createElement('div');
+      botMsg.className = 'message bot';
+      botMsg.innerHTML = `<div class="bubble">❗ GPT 응답 중 오류가 발생했습니다.</div>`;
+      chatBox.appendChild(botMsg);
+    });
+
+    input.value = '';
   }
 </script>
 

@@ -1,6 +1,8 @@
 -- init.sql
 
--- 구직자 테이블 생성
+CREATE DATABASE IF NOT EXISTS project DEFAULT CHARACTER SET utf8mb4;
+USE project;
+
 CREATE TABLE IF NOT EXISTS jobseeker (
   id VARCHAR(50) PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
@@ -10,7 +12,6 @@ CREATE TABLE IF NOT EXISTS jobseeker (
   resume LONGBLOB
 );
 
--- 고용자 테이블 생성
 CREATE TABLE IF NOT EXISTS employer (
   id VARCHAR(50) PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
