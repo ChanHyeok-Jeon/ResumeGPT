@@ -95,6 +95,12 @@
     .links a:hover {
       text-decoration: underline;
     }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin: 10px 0;
+    }
   </style>
 </head>
 <body>
@@ -108,36 +114,38 @@
   </div>
 
   <form action="/login" method="POST">
-    <!-- 탭 선택 값 전송용 -->
     <input type="hidden" id="userType" name="user_type" value="jobseeker">
 
     <input type="text" name="id" placeholder="아이디" required>
     <input type="password" name="password" placeholder="비밀번호" required>
-    
+
+    {% if error %}
+    <div style="color: red; font-size: 14px; margin-bottom: 10px;">
+      {{ error }}
+    </div>
+  {% endif %}
+
     <div class="checkbox-row">
       <input type="checkbox" id="autoLogin">
       <label for="autoLogin">자동 로그인</label>
     </div>
-  
+
     <button type="submit" class="login-btn">로그인</button>
-  
+
     <div class="links">
       <a href="/register_jobseeker">구직자 회원가입</a>
       <a href="/register_employer">고용자 회원가입</a>
       <a href="/find_id">아이디 찾기</a>
       <a href="/find_password">비밀번호 찾기</a>
     </div>
-  </form>  
+  </form>
 </div>
 
 <script>
   function selectTab(el) {
     document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
     el.classList.add('active');
-
-    // 탭에 따라 숨겨진 user_type 값 설정
-    const userTypeInput = document.getElementById('userType');
-    userTypeInput.value = el.textContent === '고용자' ? 'employer' : 'jobseeker';
+    document.getElementById('userType').value = el.textContent === '고용자' ? 'employer' : 'jobseeker';
   }
 </script>
 
