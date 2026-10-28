@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, url_for, session, Response, jsonify
 from werkzeug.utils import secure_filename
 import mysql.connector
@@ -6,8 +7,10 @@ import mysql.connector
 from gpt.chat_engine import ask_with_resume, ask_with_jobseeker_list
 from gpt.summarizer import extract_text_from_bytes
 
+load_dotenv()
+
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+app.secret_key = os.getenv('FLASK_SECRET_KEY', 'dev-only-secret')
 
 UPLOAD_FOLDER = 'static/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -18,10 +21,10 @@ if not os.path.exists(UPLOAD_FOLDER):
 
 def get_db_connection():
     return mysql.connector.connect(
-        host='localhost',
-        user='root',
-        password='0000',
-        database='project',
+        host=os.getenv('DB_HOST', 'localhost'),
+        user=os.getenv('DB_USER', 'root'),
+        password=os.getenv('DB_PASSWORD', ''),
+        database=os.getenv('DB_NAME', 'project'),
         auth_plugin='mysql_native_password'
     )
 
@@ -220,4 +223,4 @@ def logout():
     return redirect(url_for('home'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=os.getenv('FLASK_DEBUG') == '1')

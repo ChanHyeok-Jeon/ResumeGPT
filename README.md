@@ -52,7 +52,7 @@ Python · Flask · MySQL · PyMuPDF · OpenAI SDK (OpenRouter) · HTML/CSS/JS
 cd ResumeGPT
 pip install -r requirements.txt
 mysql -u root -p < database/init.sql
-cp .env.example .env   # OpenRouter API 키 입력
+cp .env.example .env   # OpenRouter API 키, DB 접속 정보 입력
 python app.py
 ```
 
@@ -61,4 +61,5 @@ python app.py
 ## 회고 · 다시 만든다면
 
 - **비밀번호를 평문으로 저장했습니다.** 지금이라면 해시(bcrypt)로 저장하겠습니다.
+- 대회 당시에는 세션 키와 DB 비밀번호가 코드에 들어 있었습니다. 이후 환경변수(`.env`)로 분리했습니다.
 - 인재 검색은 모든 이력서를 앞 1,000자씩 잘라 한 번에 넣는 방식이라, 지원자가 늘면 한계가 옵니다. 임베딩 검색으로 후보를 먼저 좁히는 구조로 바꾸겠습니다.
